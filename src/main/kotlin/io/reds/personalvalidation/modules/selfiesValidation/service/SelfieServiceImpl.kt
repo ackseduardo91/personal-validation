@@ -13,11 +13,22 @@ class SelfieServiceImpl: SelfieService {
     lateinit var directoryModels: String
 
     override fun validateSelfie(request: SelfieRequestDTO): Boolean {
-        if(request.selfies.any { ImageHelper.isImageFile(it).not() }){ throw ServiceException(ServiceError.INVALID_TYPE_FILE_FACE) }
+        // Verificar se existem arquivos de imagem inválidos
+        val invalidFiles = request.selfies.filter { !ImageHelper.isImageFile(it) }
+        if (invalidFiles.isNotEmpty()) {
+            throw ServiceException(ServiceError.INVALID_TYPE_FILE_FACE)
+        }
+
+        // Verificar se há mais de uma face detectada em cada imagem
+        request.selfies.forEach { selfie ->
+            val imageMat = ImageHelper.byteArrayToMat(selfie)
+            if (ImageHelper.detectImageFaces(imageMat, directoryModels)) {
+                throw ServiceException(ServiceError.INVALID_MORE_DETECT_ONE_FACE)
+            }
+        }
+
+        // Verificar compatibilidade entre as faces nas imagens
         val imagesMat = request.selfies.map { ImageHelper.byteArrayToMat(it) }
-//        imagesMat.forEach {
-//            if (ImageHelper.detectImageFaces(it, directoryModels)){throw ServiceException(ServiceError.INVALID_MORE_DETECT_ONE_FACE)}
-//        }
         return ImageHelper.checkCompatibilityBetweenFace(imagesMat, directoryModels)
     }
 }
