@@ -32,8 +32,8 @@ class ImageHelper {
         }
 
         //Valida se tem apenas uma face na imagem, utilizando o modelo haar cascade do opencv
-        fun detectImageFaces(image: Mat, directoryModels: String): Boolean {
-            val faceCascade = CascadeClassifier("$directoryModels/haarcascade_frontalface_alt2.xml")
+        fun detectImageFaces(image: Mat): Boolean {
+            val faceCascade = CascadeClassifier("/files/models/haarcascade_frontalface_default.xml")
             val grayImage = Mat()
             val faces = MatOfRect()
 
@@ -51,14 +51,14 @@ class ImageHelper {
         }
 
         // Função para comparar características de uma lista de imagens
-        fun checkCompatibilityBetweenFace(faces: List<Mat>, directoryModels: String): Boolean{
+        fun checkCompatibilityBetweenFace(faces: List<Mat>): Boolean{
             val threshold = 0.5f // Limite de distância aceitável
 
             for (i in 0 until faces.size - 1) {
-                val features1 = extractFeatures(faces[i], directoryModels)
+                val features1 = extractFeatures(faces[i])
 
                 for (j in i + 1 until faces.size) {
-                    val features2 = extractFeatures(faces[j], directoryModels)
+                    val features2 = extractFeatures(faces[j])
                     val distance = calculateEuclideanDistance(features1, features2)
 
                     if (distance > threshold) {
@@ -70,8 +70,8 @@ class ImageHelper {
         }
 
         // Função para extrair características de uma imagem
-        private fun extractFeatures(img: Mat, directoryModels: String): FloatArray{
-            val modelDir = "$directoryModels/tensorflow_keras_extract_feature_face.pb"
+        private fun extractFeatures(img: Mat): FloatArray{
+            val modelDir = "/files/models/tensorflow_keras_extract_feature_face.pb"
 
             SavedModelBundle.load(modelDir, "serve").use { model ->
                 val inputTensor = Tensor.create(img)

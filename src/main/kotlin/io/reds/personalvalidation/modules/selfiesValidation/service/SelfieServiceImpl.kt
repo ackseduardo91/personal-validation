@@ -22,13 +22,13 @@ class SelfieServiceImpl: SelfieService {
         // Verificar se há mais de uma face detectada em cada imagem
         request.selfies.forEach { selfie ->
             val imageMat = ImageHelper.byteArrayToMat(selfie)
-            if (ImageHelper.detectImageFaces(imageMat, directoryModels)) {
+            if (ImageHelper.detectImageFaces(imageMat)) {
                 throw ServiceException(ServiceError.INVALID_MORE_DETECT_ONE_FACE)
             }
         }
 
         // Verificar compatibilidade entre as faces nas imagens
         val imagesMat = request.selfies.map { ImageHelper.byteArrayToMat(it) }
-        return ImageHelper.checkCompatibilityBetweenFace(imagesMat, directoryModels)
+        return ImageHelper.checkCompatibilityBetweenFace(imagesMat)
     }
 }

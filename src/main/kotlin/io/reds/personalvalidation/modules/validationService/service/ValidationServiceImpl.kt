@@ -21,6 +21,6 @@ class ValidationServiceImpl: ValidationService {
     override fun validateImages(request: CompareImagesRequestDTO): Boolean {
         val imageSelfieMat = ImageHelper.byteArrayToMat(request.imageSelfie)
         val frontImageRgMat = ImageHelper.byteArrayToMat(request.frontImageRg)
-        return ImageHelper.checkCompatibilityBetweenFace(arrayListOf(imageSelfieMat, frontImageRgMat), directoryModels)
+        return ImageHelper.checkCompatibilityBetweenFace(arrayListOf(imageSelfieMat, frontImageRgMat))
     }
 }

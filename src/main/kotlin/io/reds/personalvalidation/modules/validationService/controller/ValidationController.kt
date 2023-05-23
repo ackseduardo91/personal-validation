@@ -36,7 +36,7 @@ class ValidationController(
         //@RequestBody @Valid request: SelfieRequestDTO
         val imgList = arrayListOf(
             ClassPathResource("/files/images/IMG_1.jpg").file.readBytes(),
-            ClassPathResource("/files/images/IMG_2.jpg").file.readBytes(),
+//            ClassPathResource("/files/images/IMG_2.jpg").file.readBytes(),
 //            ClassPathResource("/files/documents/DOC_01.pdf").file.readBytes(),
 //            ClassPathResource("/files/images/IMG_3.jpg").file.readBytes(),
 //            ClassPathResource("/files/images/IMG_4.jpg").file.readBytes(),
